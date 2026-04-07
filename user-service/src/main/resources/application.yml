@@ -1,0 +1,27 @@
+server:
+  port: 8081
+ 
+spring:
+  application:
+    name: user-service
+ 
+  datasource:
+    # url: jdbc:mysql://localhost:3306/fooddelivery
+    url: jdbc:mysql://mysql-container:3306/food_delivery
+    username: root
+    password: root
+ 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+ 
+  kafka:
+    bootstrap-servers: kafka:9092
+    # bootstrap-servers: localhost:9092
+ 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server-container:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/

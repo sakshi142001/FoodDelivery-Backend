@@ -1,0 +1,43 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: restaurant-service
+
+  datasource:
+    # url: jdbc:mysql://localhost:3306/restaurant_db?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql-container:3306/restaurant_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    # bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: restaurant-group
+
+      auto-offset-reset: earliest 
+
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.fooddelivery.restaurant_service.kafka.event.OrderEvent
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server-container:8761/eureka/
+      # defaultZone: http://localhost:8761/eureka/

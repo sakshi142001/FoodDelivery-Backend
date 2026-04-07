@@ -1,0 +1,35 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: notification-service
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    # bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+
+      # Error handling deserializer
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
+      properties:
+        # Delegate actual deserializers
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+        # Trust packages
+        spring.json.trusted.packages: "*"
+
+        # VERY IMPORTANT → Match your event class
+        spring.json.value.default.type: com.fooddelivery.notification_service.kafka.event.OrderEvent
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server-container:8761/eureka/
+      # defaultZone: http://localhost:8761/eureka/
